@@ -1,26 +1,43 @@
 package main
 
 import (
-	"flag"
+	"log"
+	"os"
 
-	"github.com/jiajunhuang/huang/cli"
+	"github.com/jiajunhuang/huang/cmd"
 	"github.com/jiajunhuang/huang/master"
 	"github.com/jiajunhuang/huang/worker"
-)
-
-var (
-	runAsMaster = flag.Bool("master", false, "run as master")
-	runAsWorker = flag.Bool("worker", false, "run as worker")
+	"github.com/urfave/cli"
 )
 
 func main() {
-	flag.Parse()
+	app := cli.NewApp()
 
-	if *runAsMaster {
-		master.Main()
-	} else if *runAsWorker {
-		worker.Main()
-	} else { // by default, we're running as cli
-		cli.Main()
+	app.Commands = []cli.Command{
+		{
+			Name:  "master",
+			Usage: "run as master",
+			Action: func(c *cli.Context) error {
+				return master.Main(c)
+			},
+		},
+		{
+			Name:  "worker",
+			Usage: "run as worker",
+			Action: func(c *cli.Context) error {
+				return worker.Main(c)
+			},
+		},
+	}
+
+	app.Name = "huang"
+	app.Usage = "$ huang"
+	app.Action = func(c *cli.Context) error {
+		return cmd.Main(c)
+	}
+
+	err := app.Run(os.Args)
+	if err != nil {
+		log.Fatal(err)
 	}
 }

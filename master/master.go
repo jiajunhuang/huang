@@ -1,6 +1,7 @@
 package master
 
 import (
+	"github.com/urfave/cli"
 	"go.uber.org/zap"
 )
 
@@ -9,6 +10,8 @@ var (
 	sugar     = logger.Sugar()
 )
 
-func Main() {
+func Main(c *cli.Context) error {
 	defer logger.Sync() // flushes buffer, if any
+
+	return nil
 }

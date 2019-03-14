@@ -8,6 +8,7 @@ import (
 	"github.com/containerd/containerd/oci"
 	"github.com/jiajunhuang/huang/pkg/deployment"
 	"github.com/jiajunhuang/huang/pkg/random"
+	"github.com/urfave/cli"
 	"go.uber.org/zap"
 )
 
@@ -22,7 +23,7 @@ var (
 	ctx       = namespaces.WithNamespace(context.Background(), HuangNS) // global namespace... a little bit bad taste
 )
 
-func Main() error {
+func Main(c *cli.Context) error {
 	defer logger.Sync() // flushes buffer, if any
 
 	client, err := containerd.New(ContainerdAddr)
